@@ -1,6 +1,6 @@
 import streamlit as st
 import pickle
-import shap
+#import shap
 import numpy as np
 import pandas as pd
 
@@ -113,14 +113,14 @@ else:
     # -----------------------
     # SHAP explanation
     # -----------------------
-    explainer = shap.TreeExplainer(model, data=background, feature_perturbation="interventional")
-    shap_values = explainer.shap_values(df, check_additivity=False)
+    # explainer = shap.TreeExplainer(model, data=background, feature_perturbation="interventional")
+    # shap_values = explainer.shap_values(df, check_additivity=False)
 
-    shap_df = pd.DataFrame({
-        "feature": df.columns,
-        "value": df.iloc[0].values,
-        "shap": shap_values[0]
-    }).sort_values(by="shap", key=lambda x: np.abs(x), ascending=False)
+    # shap_df = pd.DataFrame({
+        # "feature": df.columns,
+        # "value": df.iloc[0].values,
+        # "shap": shap_values[0]
+    # }).sort_values(by="shap", key=lambda x: np.abs(x), ascending=False)
 
     st.write("### 🔍 Top factors influencing this prediction")
-    st.dataframe(shap_df.head(5))
+    # st.dataframe(shap_df.head(5))
