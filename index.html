@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>📊 Churn Chatbot</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        #chatbox { width: 500px; margin: auto; border: 1px solid #ccc; padding: 20px; }
+        .msg { margin: 10px 0; }
+        .user { color: blue; }
+        .bot { color: green; }
+    </style>
+</head>
+<body>
+    <h2>📊 Churn Q&A Chatbot</h2>
+    <div id="chatbox"></div>
+    <form id="chat-form">a
+        <input type="text" id="msg" placeholder="Ask a churn question..." style="width:400px;" required>
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        const form = document.getElementById("chat-form");
+        const chatbox = document.getElementById("chatbox");
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const msg = document.getElementById("msg").value;
+            chatbox.innerHTML += `<div class='msg user'>You: ${msg}</div>`;
+            document.getElementById("msg").value = "";
+
+            const response = await fetch("/ask", {
+                method: "POST",
+                body: new URLSearchParams({ "msg": msg }),
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            });
+            const data = await response.json();
+            chatbox.innerHTML += `<div class='msg bot'>Bot: ${data.response}</div>`;
+        };
+    </script>
+</body>
+</html>
