@@ -1,32 +1,33 @@
-# ---------------------------
-# Import libraries
-# ---------------------------
+# -------------------------------
+# app.py
+# -------------------------------
+
 from flask import Flask, render_template, request, jsonify
-import pandas as pd
+import faiss
+import pickle
+from sentence_transformers import SentenceTransformer
 from transformers import pipeline
+import numpy as np
+
+# ---------------------------
+# Load FAISS index + knowledge base
+# ---------------------------
+index = faiss.read_index("churn_index.faiss")
+
+with open("knowledge.pkl", "rb") as f:
+    knowledge_base = pickle.load(f)
+
+# Load embedding model (same as in build_index.py)
+embedder = SentenceTransformer("all-MiniLM-L6-v2")
+
+# Load a Hugging Face LLM for answering
+# Flan-T5 is small and runs on CPU
+qa_model = pipeline("text2text-generation", model="google/flan-t5-base")
 
 # ---------------------------
 # Initialize Flask app
 # ---------------------------
 app = Flask(__name__)
-
-# ---------------------------
-# Load churn dataset
-# ---------------------------
-df = pd.read_csv("syriatel_cleaned.csv")
-
-# Create a text summary of the dataset (context for Q&A model)
-# Example: convert column stats into text the model can search
-summary_text = ""
-for col in df.select_dtypes(include=["int64", "float64"]).columns:
-    summary_text += f"The average {col} is {df[col].mean():.2f}. "
-    summary_text += f"The maximum {col} is {df[col].max():.2f}. "
-    summary_text += f"The minimum {col} is {df[col].min():.2f}. "
-
-# ---------------------------
-# Load Hugging Face Q&A model
-# ---------------------------
-qa_pipeline = pipeline("question-answering", model="distilbert-base-uncased-distilled-squad")
 
 # ---------------------------
 # Homepage route
@@ -40,16 +41,21 @@ def home():
 # ---------------------------
 @app.route("/ask", methods=["POST"])
 def ask():
-    user_input = request.form["msg"]
+    user_q = request.form["msg"]
 
-    try:
-        # Use Hugging Face Q&A pipeline
-        result = qa_pipeline(question=user_input, context=summary_text)
-        response = result["answer"]
-    except Exception as e:
-        response = f"Error: {str(e)}"
+    # 1. Embed user question
+    q_vec = embedder.encode([user_q])
+    q_vec = np.array(q_vec).astype("float32")
 
-    return jsonify({"response": response})
+    # 2. Search FAISS for most relevant knowledge
+    D, I = index.search(q_vec, k=3)  # return top-3 results
+    retrieved_context = " ".join([knowledge_base[i] for i in I[0]])
+
+    # 3. Send to LLM with retrieved context
+    prompt = f"Context: {retrieved_context}\n\nQuestion: {user_q}\nAnswer:"
+    answer = qa_model(prompt, max_length=128, do_sample=False)[0]["generated_text"]
+
+    return jsonify({"response": answer})
 
 # ---------------------------
 # Run Flask app

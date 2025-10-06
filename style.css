@@ -1,0 +1,106 @@
+/* Dark mode WhatsApp-style chatbot */
+
+/* General background */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Chat container */
+.chat-container {
+    width: 400px;
+    height: 600px;
+    background: #1e1e1e;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.5);
+}
+
+/* Header */
+.chat-header {
+    background: #2a2f32;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Chat box */
+.chat-box {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Chat bubbles */
+.message {
+    margin: 5px 0;
+    padding: 10px 14px;
+    border-radius: 16px;
+    max-width: 75%;
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* User messages */
+.user-message {
+    align-self: flex-end;
+    background: #056162;
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+
+/* Bot messages */
+.bot-message {
+    align-self: flex-start;
+    background: #2a2f32;
+    color: #d1d1d1;
+    border-bottom-left-radius: 4px;
+}
+
+/* Input area */
+.chat-input {
+    display: flex;
+    padding: 10px;
+    background: #2a2f32;
+    border-top: 1px solid #333;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    background: #404040;
+    color: #fff;
+}
+
+.chat-input button {
+    margin-left: 8px;
+    background: #056162;
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 18px;
+    transition: background 0.3s;
+}
+
+.chat-input button:hover {
+    background: #128C7E;
+}
