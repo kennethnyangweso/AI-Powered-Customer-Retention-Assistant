@@ -51,3 +51,10 @@ Telecom companies lack an interactive, explainable, and accessible tool that all
 - User Satisfaction: Feedback from test users (e.g., 1–5 rating on clarity).
 
 - Query Coverage: Ability of chatbot to answer at least 80% of user queries about churn.
+
+  ## Outcome and results
+
+  <img width="1092" height="621" alt="Screenshot (37)" src="https://github.com/user-attachments/assets/ca9b9297-29db-4f2c-8087-edef82326972" />
+
+  
+
