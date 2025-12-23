@@ -154,3 +154,9 @@ Open a browser and navigate to http://localhost:5000
 ## 📸 Outcome 
 
   <img width="1092" height="621" alt="Screenshot (37)" src="https://github.com/user-attachments/assets/ca9b9297-29db-4f2c-8087-edef82326972" />
+
+## **👤 Author**
+
+**Kenneth Nyangweso**
+
+**Data Scientist | Electrical & Telecommunications Engineer**
